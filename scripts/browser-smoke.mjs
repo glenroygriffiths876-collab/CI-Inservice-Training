@@ -2,11 +2,11 @@ import {chromium} from 'playwright';
 import fs from 'node:fs';
 const start=process.env.CI_BASE||'http://127.0.0.1:8080/';
 const browser=await chromium.launch({headless:true});
-const out=[];
-for(const width of [390,768,1440]){
+const out=[];fs.mkdirSync('reports',{recursive:true});
+for(const width of [320,390,768,1440]){
  const ctx=await browser.newContext({viewport:{width,height:900},serviceWorkers:'block'});const p=await ctx.newPage();const err=[];p.on('pageerror',e=>err.push(e.message));
  try{
- await p.goto(start,{waitUntil:'domcontentloaded'});await p.getByText('Investigate.',{exact:false}).first().waitFor();await p.locator('button[data-go="lesson:1.1"]').first().click();await p.locator('#lesson-question button').first().click();await p.locator('#complete').click();await p.reload();await p.getByRole('button',{name:'✓ Completed'}).waitFor();
+ await p.goto(start,{waitUntil:'domcontentloaded'});await p.getByText('Investigate.',{exact:false}).first().waitFor();await p.locator('.cinematic').waitFor();const hero=await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2);if(!hero)throw Error('Dashboard horizontal overflow');await p.screenshot({path:'reports/dashboard-'+width+'.png',fullPage:true});await p.locator('button[data-go="lesson:1.1"]').first().click();await p.locator('#lesson-question button').first().click();await p.screenshot({path:'reports/lesson-'+width+'.png',fullPage:true});if(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2))throw Error('Lesson horizontal overflow');await p.locator('#complete').click();await p.reload();await p.getByRole('button',{name:'✓ Completed'}).waitFor();
  await p.goto(start+'#forms');await p.locator('#form-choice').waitFor();await p.goto(start+'#practice');await p.locator('#cascade-result').waitFor();await p.goto(start+'#certificate');await p.locator('#cert-display').waitFor();
  const overflow=await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2);if(overflow)throw Error('Horizontal overflow');if(err.length)throw Error(err.join('; '));out.push({width,status:'pass'})
  }catch(e){out.push({width,status:'fail',error:e.message,errors:err})}await ctx.close();

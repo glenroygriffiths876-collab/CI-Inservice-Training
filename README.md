@@ -16,3 +16,6 @@ Serve with `python -m http.server 8080` from repository root. Run `node scripts/
 
 ## Technical approval work
 Review all course text with the national technical team; confirm source rights and edition currentness, form extraction/offsets, actual data definitions, clinical and legal claims, accessibility and browser tests. Keep non-public source documents and high-stakes answer keys off the public repository. Use approved Moodle native Quiz and activity completion, facilitated practical rubrics, role-based user management and an issued credential verification registry for production. 
+
+## Editorial frontend redesign
+The home, learning catalogue, module pages, lesson presentation and navigation use a new editorial layout. Three existing illustrations from the owner's Social Services project are used as explicitly provisional design-reference visuals rather than new CI-specific artwork. The custom-generated CI hero is not yet transferred to this repository; full original illustrated asset production remains outstanding. Existing course data, document reader and local learning records are retained.
