@@ -1,0 +1,21 @@
+{
+  "name": "National Contact Investigation In-Service Training Academy",
+  "short_name": "CI Academy",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fcf8ed",
+  "theme_color": "#124a43",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

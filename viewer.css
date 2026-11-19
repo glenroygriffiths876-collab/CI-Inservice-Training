@@ -1,0 +1,204 @@
+/* WRHA in-app document viewer — page controls, PDF.js canvas, text layer and fallbacks. */
+.pdf-modal{width:min(1320px,98vw);height:min(96vh,1060px);max-height:96vh;display:none}
+.pdf-modal[open]{display:flex;flex-direction:column}
+.pdf-modal .modal-header{flex:0 0 auto}
+.pdf-modal .modal-heading{min-width:0}
+.pdf-modal #pdfTitle{max-width:1100px;overflow-wrap:anywhere}
+.pdf-tools{gap:8px;display:flex;flex-wrap:wrap;align-items:center;min-height:60px}
+.pdf-tools button.viewer-tool{min-width:34px;min-height:36px;border:1px solid #dae6f5;background:#f7fbff;border-radius:8px;color:#174c84;padding:7px 10px;white-space:nowrap;font-weight:800;transition:.2s}
+.pdf-tools button.viewer-tool:hover:not(:disabled){background:#e6f2ff;border-color:#96bfea}
+.pdf-tools button.viewer-tool:disabled{opacity:.38;cursor:not-allowed}
+.pdf-tools input[type=number]{height:36px;width:62px;padding:7px;border:1px solid #cddff0;border-radius:7px}
+.pdf-tools #pdfTotal{font-size:11px;font-weight:700;color:#526b85}
+.pdf-tools select{height:36px;min-width:84px}
+.pdf-tools .pdf-find{display:flex;align-items:center;gap:6px}
+.pdf-tools .pdf-find input{height:36px;width:clamp(110px,11vw,195px);padding:7px 10px;border:1px solid #cddff0;border-radius:8px;outline-offset:2px}
+#pdfSource,#pdfDownload{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:6px 11px;border-radius:8px;font-size:11px;font-weight:800;border:1px solid #c9dbee;white-space:nowrap}
+#pdfSource{background:#f1f7ff;color:#265c93}
+#pdfDownload{color:#fff;background:#0755a5;border-color:#0755a5}
+#pdfDownload[hidden]{display:none}
+#pdfDownload:hover{background:#03417c;text-decoration:none}
+.pdf-frame-wrap{display:flex;min-height:0;flex:1;flex-direction:column;position:relative;overflow:hidden;background:#dce7f2}
+.reader-loading{flex:1;display:grid;place-items:center;padding:40px;text-align:center;color:#276198;font-size:13px}
+.reader-pages{flex:1;overflow:auto;min-height:0;width:100%;padding:24px 14px;scrollbar-gutter:stable;background:#dfe8f2}
+.reader-page-surface{position:relative;margin:0 auto;background:#fff;box-shadow:0 16px 32px #19355230;line-height:1}
+.reader-page-surface canvas{display:block;margin:0 auto}
+.reader-page-surface .textLayer{position:absolute;left:0;top:0;right:0;bottom:0;z-index:2;overflow:hidden;opacity:1;line-height:1}
+.reader-page-surface .textLayer>span{color:transparent;position:absolute;white-space:pre;cursor:text;transform-origin:0% 0%}
+.reader-page-surface .textLayer ::selection{background:rgba(35,132,243,.24);color:transparent}
+.reader-page-surface .textLayer .markedContent{top:0;height:0}
+.pdf-frame-wrap #pdfFrame:not([hidden]){display:block;flex:1;min-height:0;width:100%;height:100%;border:0;background:#fff}
+.pdf-frame-wrap #pdfFrame[hidden],.reader-pages[hidden],.reader-webresource[hidden],.reader-loading[hidden]{display:none!important}
+.reader-webresource{flex:1;max-width:520px;width:100%;margin:auto;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+.reader-web-icon{width:70px;height:70px;border-radius:19px;background:#e9f4ff;color:#064d9d;font-size:33px;display:grid;place-items:center;margin-bottom:16px}
+.reader-webresource h3{margin:0 0 8px;color:#0a396b;font-size:22px}
+.reader-webresource p{font-size:13px;line-height:1.7;color:#59748f}
+.reader-webresource .btn{margin-top:13px}
+.pdf-modal .pdf-help{flex:0 0 auto;background:#eef5fe;border-top:1px solid #cee0f3;padding:10px 14px;font-size:11px;color:#46627e;line-height:1.55}
+.pdf-modal:fullscreen{border-radius:0;width:100vw;height:100vh;max-height:100vh;max-width:100vw}
+@media(max-width:1000px){.pdf-modal{width:100vw;height:98vh;max-height:98vh;border-radius:12px}.pdf-tools{gap:6px;padding:9px 12px}.pdf-tools .pdf-find input{width:120px}.pdf-tools #pdfFullScreen{display:none}}
+@media(max-width:620px){.pdf-modal{width:100vw;height:100dvh;max-height:100dvh;border-radius:0}.pdf-modal .modal-header{padding:9px 13px}.pdf-modal .modal-heading h2{font-size:13px;line-height:1.35}.pdf-modal .modal-heading .eyebrow{font-size:8px}.pdf-modal .modal-heading p{font-size:9px}.pdf-modal .pdf-tools{gap:5px;padding:7px 8px;max-height:155px;overflow-y:auto}.pdf-tools button.viewer-tool{font-size:11px;min-width:29px;min-height:32px;padding:5px 7px}.pdf-tools label{font-size:10px}.pdf-tools select{min-width:79px;height:32px}.pdf-tools .pdf-find input{width:104px;height:32px}.pdf-tools input[type=number]{width:45px;height:32px}.pdf-tools #pdfTotal{font-size:9px}.pdf-tools #pdfSource,.pdf-tools #pdfDownload{font-size:9px;padding:4px 7px;min-height:32px}.reader-pages{padding:12px 6px}.pdf-modal .pdf-help{font-size:10px;padding:8px}}
+@media(prefers-reduced-motion:reduce){.pdf-tools button.viewer-tool{transition:none}}
+
+#pdfLegalAlt{display:inline-flex;align-items:center;min-height:36px;border-radius:8px;border:1px solid #c7d9ed;background:#fff;color:#305c86;padding:6px 11px;font-size:11px;font-weight:800;white-space:nowrap}
+#pdfLegalAlt[hidden]{display:none}
+
+/* A publisher may block embedded PDFs. Always display a visible, informative alternative. */
+.reader-blocked{flex:1;min-height:0;display:grid;grid-template-columns:minmax(190px,.75fr) minmax(260px,1fr);gap:clamp(18px,3vw,45px);align-items:center;background:linear-gradient(130deg,#eaf4ff,#f9fcff);padding:clamp(18px,3vw,44px);overflow:auto;}
+.reader-blocked[hidden]{display:none!important}
+.reader-blocked-visual{display:flex;flex-direction:column;align-items:center;gap:10px;padding:15px 8px}
+.reader-blocked-visual img{display:block;max-width:min(100%,290px);max-height:57vh;object-fit:contain;background:white;box-shadow:0 15px 35px #13386825;border:1px solid #d6e1ed;border-radius:7px}
+.reader-blocked-visual img[hidden]{display:none!important}
+.reader-preview-label{font-size:11px;color:#587695;font-weight:700}
+.reader-blocked-details{max-width:580px}
+.reader-blocked-details h3{color:#123b69;font-size:clamp(20px,2.2vw,29px);line-height:1.25;margin:6px 0 15px}
+.reader-blocked-details p{font-size:13px;color:#526c86;line-height:1.75}
+.reader-blocked-actions{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}
+.reader-blocked-actions .btn{min-height:44px}
+.reader-blocked-actions .btn-secondary{background:white;border:1px solid #bed3eb;color:#134a89}
+.reader-blocked-details .reader-permission-note{border-top:1px solid #cddfee;padding-top:13px;font-size:11px;color:#7b8ba0}
+@media(max-width:680px){.reader-blocked{grid-template-columns:1fr;align-content:start;padding:14px;gap:4px}.reader-blocked-visual{padding:0}.reader-blocked-visual img{max-height:200px}.reader-blocked-details h3{font-size:18px}.reader-blocked-details p{font-size:11.5px}.reader-blocked-actions{margin:12px 0}.reader-blocked-actions .btn{font-size:11px}}
+
+/* Interactive WRHA reader, scoped to existing dialog. */
+#pdfDialog,#pdfDialog *{box-sizing:border-box}
+#pdfDialog[open]{width:min(1320px,98vw);max-width:100vw;height:min(96dvh,1060px);max-height:96dvh;overflow:hidden}
+#pdfDialog [hidden]{display:none!important}
+#pdfDialog .modal-header{padding:9px 14px;gap:8px;min-height:0}
+#pdfDialog .modal-heading{min-width:0;overflow:hidden}
+#pdfDialog #pdfTitle{font-size:clamp(14px,2vw,23px);line-height:1.25;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+#pdfDialog #pdfMeta{font-size:11px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#pdfDialog .modal-close{flex:none}
+#pdfDialog .pdf-tools{position:relative;z-index:6;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:6px;padding:7px 10px;max-height:none;min-height:0;overflow:visible;background:#f5faff}
+#pdfDialog .viewer-tool,#pdfDialog summary{height:auto;min-height:42px;max-width:100%;font:inherit;font-size:13px;font-weight:750;line-height:1.15;padding:7px 10px;white-space:normal;cursor:pointer;border:1px solid #ccdff1;border-radius:9px;color:#174c84;background:#fff}
+#pdfDialog .viewer-tool:disabled{cursor:not-allowed;opacity:.45}
+#pdfDialog :is(button,summary,a,input,select):focus-visible{outline:3px solid #e8a600;outline-offset:2px}
+#pdfDialog #pdfPrevious,#pdfDialog #pdfNext{font-size:24px;padding:1px 12px;min-width:44px}
+#pdfDialog #pdfFullScreen{display:inline-flex;align-items:center;justify-content:center}
+#pdfDialog #pdfListen{background:#0755a5;color:#fff}
+#pdfDialog .wrha-reader-count{font-weight:800;color:#174c84;min-width:76px;text-align:center;font-size:13px;white-space:nowrap}
+#pdfDialog #pdfTools{position:static}
+#pdfDialog #pdfTools summary{list-style:none;display:grid;place-items:center}
+#pdfDialog #pdfTools summary::-webkit-details-marker{display:none}
+#pdfDialog #pdfTools[open] summary{background:#dceeff}
+#pdfDialog .wrha-reader-panel{position:absolute;z-index:8;top:100%;right:8px;width:min(450px,calc(100% - 16px));max-height:min(62dvh,500px);overflow:auto;overscroll-behavior:contain;background:#fff;color:#143960;border:1px solid #bad4eb;border-radius:14px;box-shadow:0 10px 35px #15396a44;padding:12px;display:grid;gap:10px}
+#pdfDialog .wrha-reader-panel-head{display:flex;align-items:center;justify-content:space-between;position:sticky;top:-12px;z-index:2;background:white;padding:4px 0}
+#pdfDialog .wrha-reader-toolgroup{display:grid;gap:8px;border-top:1px solid #dbe7f2;padding-top:10px;min-width:0}
+#pdfDialog .wrha-tool-label{font-weight:800;color:#0755a5;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+#pdfDialog .wrha-tool-row{display:flex;align-items:center;flex-wrap:wrap;gap:7px;min-width:0}
+#pdfDialog .wrha-reader-panel label{font-size:13px;min-width:0;color:inherit;flex-wrap:wrap}
+#pdfDialog .wrha-reader-panel :is(input,select){font-size:16px;min-height:38px;max-width:100%;min-width:0}
+#pdfDialog .wrha-reader-panel input[type=checkbox]{width:20px;height:20px;min-height:20px}
+#pdfDialog .wrha-wide-label{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px}
+#pdfDialog .wrha-wide-label select{width:100%}
+#pdfDialog #pdfSearch{width:clamp(105px,34vw,200px)}
+#pdfDialog .wrha-reader-panel a{margin:0;font-size:13px;min-height:42px;padding:8px;border:1px solid #c9dbee;border-radius:8px;display:inline-flex;align-items:center;white-space:normal;overflow-wrap:anywhere}
+#pdfDialog #pdfTranscript{white-space:pre-wrap;overflow-wrap:anywhere;max-height:38dvh;overflow:auto;padding:10px;background:#edf5ff;color:#13345a;line-height:1.6;font-size:14px;border-radius:8px}
+#pdfDialog #pdfAudioStatus{margin:0;font-size:12px;line-height:1.4}
+#pdfDialog #pdfAudioStatus:empty,#pdfDialog #pdfStatus:empty{display:none}
+#pdfDialog .pdf-frame-wrap{background:#173653}
+#pdfDialog .reader-pages{padding:8px 8px;scrollbar-gutter:auto;background:radial-gradient(ellipse at 50% 0,#4674a1,#173653 76%);flex:1;min-width:0;min-height:0;overflow:auto;overscroll-behavior:contain}
+#pdfDialog .wrha-reader-book{width:max-content;max-width:none;min-width:0;margin:0 auto;display:flex;align-items:flex-start;justify-content:center;gap:4px;position:relative;perspective:1800px;touch-action:pan-x pan-y}
+#pdfDialog .reader-page-surface{margin:0;flex:none;overflow:hidden;box-shadow:0 12px 25px #00162b88;border-radius:2px}
+#pdfDialog .textLayer{position:absolute;inset:0;overflow:hidden;opacity:1;line-height:1;text-size-adjust:none;forced-color-adjust:none;transform-origin:0 0}
+#pdfDialog .textLayer :is(span,br){color:transparent;position:absolute;white-space:pre;cursor:text;transform-origin:0 0}
+#pdfDialog .textLayer .markedContent{top:0;height:0}
+#pdfDialog .wrha-reader-turn{position:absolute;top:0;z-index:5;pointer-events:none;backface-visibility:hidden;transform-style:preserve-3d;animation:wrha-leaf .57s cubic-bezier(.2,.68,.28,1) forwards;box-shadow:0 14px 30px #0007}
+#pdfDialog .wrha-reader-turn.back{animation-name:wrha-leaf-back}
+@keyframes wrha-leaf{0%{transform:rotateY(0);filter:brightness(1)}65%{filter:brightness(.78)}100%{transform:rotateY(-175deg);opacity:0}}
+@keyframes wrha-leaf-back{0%{transform:rotateY(0);filter:brightness(1)}65%{filter:brightness(.78)}100%{transform:rotateY(175deg);opacity:0}}
+#pdfDialog:is(:fullscreen,.wrha-reader-full){position:fixed;inset:0;margin:0;border:0;border-radius:0;width:100%;height:100dvh;max-width:100%;max-height:100dvh}
+#pdfDialog:is(:fullscreen,.wrha-reader-full) .modal-header{padding:6px 10px}
+#pdfDialog:is(:fullscreen,.wrha-reader-full) .modal-heading .eyebrow,#pdfDialog:is(:fullscreen,.wrha-reader-full) #pdfMeta{display:none}
+#pdfDialog .pdf-help{padding:5px 10px;overflow-wrap:anywhere;max-height:68px;overflow:auto}
+#pdfDialog .reader-loading{background:#edf5fc}
+#pdfDialog .reader-webresource{background:#f5faff;max-width:none;width:100%;overflow:auto}
+#pdfDialog.wrha-reader-contrast :is(.modal-header,.pdf-tools,.wrha-reader-panel,.wrha-reader-panel-head,.pdf-help,.reader-pages){background:#000!important;color:#fff!important}
+#pdfDialog.wrha-reader-contrast :is(.viewer-tool,summary,a,input,select,label,.wrha-tool-label,.wrha-reader-count,#pdfTitle,#pdfMeta){background:#000!important;color:#fff!important;border-color:#fff!important}
+#pdfDialog[data-reader-size=large] :is(.viewer-tool,summary,.wrha-reader-count,.wrha-reader-panel label,.wrha-reader-panel a){font-size:16px!important}
+#pdfDialog[data-reader-size=xlarge] :is(.viewer-tool,summary,.wrha-reader-count,.wrha-reader-panel label,.wrha-reader-panel a){font-size:18px!important}
+#pdfDialog.wrha-reader-motion *{animation:none!important;transition:none!important}
+@media(prefers-reduced-motion:reduce){#pdfDialog *{animation:none!important;transition:none!important}}
+@media(max-width:620px){
+ #pdfDialog[open]{width:100vw;height:100dvh;max-height:100dvh;border-radius:0}
+ #pdfDialog .modal-header{padding:7px 8px}
+ #pdfDialog .pdf-tools{padding:5px 6px;gap:4px;display:grid;grid-template-columns:44px minmax(0,1fr) 44px;justify-items:stretch}
+ #pdfDialog .pdf-tools>button,#pdfDialog #pdfTools>summary{min-height:40px;padding:5px 7px}
+ #pdfDialog .wrha-reader-count{align-self:center;min-width:0}
+ #pdfDialog .wrha-reader-panel{max-height:min(62dvh,480px)}
+ #pdfDialog .reader-pages{padding:5px 4px}
+ #pdfDialog #pdfFullScreen{width:100%;font-size:12px}
+}
+@media(max-height:450px){
+ #pdfDialog .modal-header{padding:4px 8px}
+ #pdfDialog .modal-heading .eyebrow,#pdfDialog #pdfMeta{display:none}
+ #pdfDialog #pdfTitle{-webkit-line-clamp:1;font-size:14px}
+ #pdfDialog .pdf-tools{padding:3px 6px;gap:4px}
+ #pdfDialog .viewer-tool,#pdfDialog summary{min-height:36px}
+ #pdfDialog .wrha-reader-panel{max-height:calc(100dvh - 110px)}
+}
+
+#pdfDialog .wrha-reader-panel{max-height:min(500px,var(--wrha-tools-space,62dvh));}
+#pdfDialog .wrha-reader-book:focus-visible,#pdfDialog .reader-pages:focus-visible{outline:3px solid #ffc928;outline-offset:-3px}
+#pdfDialog .reader-page-surface .textLayer span::selection{background:#2384f366}
+
+/* Phone: navigation row gets a wide page count; actions use three equal columns. */
+@media(max-width:620px){
+ #pdfDialog .pdf-tools{grid-template-columns:repeat(6,minmax(0,1fr))}
+ #pdfDialog #pdfPrevious,#pdfDialog #pdfNext{grid-column:span 1;min-width:0;padding:4px}
+ #pdfDialog #pdfCount{grid-column:span 4;white-space:normal}
+ #pdfDialog #pdfListen,#pdfDialog #pdfTools,#pdfDialog #pdfFullScreen{grid-column:span 2;min-width:0}
+}
+#pdfDialog #pdfAudioStatus:not(:empty){flex:0 0 auto;padding:6px 10px;background:#e7f2ff;color:#174c84;max-height:52px;overflow:auto;font-weight:600}
+#pdfDialog.wrha-reader-contrast #pdfAudioStatus{background:#000!important;color:#fff!important}
+
+/* Unified source collections, inside the existing WRHA reader dialog. */
+#pdfDialog .reader-webresource{justify-content:flex-start;align-items:stretch;text-align:left;padding:clamp(14px,3vw,34px);gap:12px;overflow:auto}
+#pdfDialog .reader-webresource h3,#pdfDialog .reader-webresource>p{max-width:790px;width:100%;margin:0 auto}
+#pdfDialog .reader-web-icon{margin:0 auto 2px;width:48px;height:48px;font-size:24px}
+#pdfDialog .wrha-collection-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:10px;width:min(100%,790px);margin:0 auto}
+#pdfDialog .wrha-collection-card{display:flex;flex-direction:column;gap:6px;align-items:flex-start;text-align:left;min-width:0;overflow-wrap:anywhere;padding:14px;border:1px solid #c6daec;border-radius:11px;background:#fff;color:#174c84;cursor:pointer;font:inherit}
+#pdfDialog .wrha-collection-card strong{font-size:15px;line-height:1.35}
+#pdfDialog .wrha-collection-card span{font-size:13px;color:#0755a5;font-weight:700}
+#pdfDialog .wrha-collection-note{grid-column:1/-1;margin:0;padding:10px;background:#fff;border-left:3px solid #0755a5}
+#pdfDialog #pdfWebLink,#pdfDialog #pdfCollectionBack{align-self:center}
+#pdfDialog #pdfLocalOpen{margin:0 0 10px;max-width:100%;white-space:normal}
+#pdfDialog.wrha-reader-contrast :is(.reader-webresource,.wrha-collection-card,.wrha-collection-note,.wrha-collection-card span){background:#000!important;color:#fff!important}
+@media(max-width:620px){#pdfDialog #pdfReturnCollection{grid-column:1/-1;min-height:32px;padding:3px 6px}}
+
+/* Embedded fallback stays in the resource reader, never uses a full-screen access notice. */
+#pdfDialog .wrha-embedded-bar{display:flex;flex:0 0 auto;align-items:center;gap:8px;flex-wrap:wrap;background:#eef6ff;color:#174c84;padding:7px 10px;font-size:12px;font-weight:650;min-width:0}
+#pdfDialog .wrha-embedded-bar span{flex:1 1 120px;min-width:0;overflow-wrap:anywhere}
+#pdfDialog .wrha-embedded-bar .viewer-tool{min-height:34px;font-size:12px;padding:5px 9px}
+#pdfDialog.wrha-native-mode #pdfPrevious,#pdfDialog.wrha-native-mode #pdfNext,#pdfDialog.wrha-native-mode #pdfListen,#pdfDialog.wrha-native-mode #pdfCount{display:none!important}
+#pdfDialog.wrha-native-mode .pdf-tools{display:flex;justify-content:flex-end;gap:6px}
+#pdfDialog.wrha-native-mode .pdf-help{font-size:11px;max-height:54px;overflow:auto}
+#pdfDialog .wrha-embed-unavailable{display:flex;flex:1;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:16px;color:#174c84;background:#f3f8ff;text-align:center}
+#pdfDialog .wrha-embed-unavailable[hidden],#pdfDialog .wrha-embedded-bar[hidden]{display:none!important}
+#pdfDialog.wrha-reader-contrast .wrha-embedded-bar{background:#000;color:#fff}
+@media(max-width:620px){#pdfDialog.wrha-native-mode .pdf-tools #pdfFullScreen{width:auto}#pdfDialog .wrha-embedded-bar{padding:5px 7px;gap:5px}}
+
+/* Collection shelves use the same book cards as the primary catalogue. */
+#pdfDialog #pdfCollectionItems{width:100%;max-width:1120px;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:stretch}
+#pdfDialog #pdfCollectionItems .manual-card{position:relative;min-width:0;animation:none!important;transform:none!important;text-align:left;color:#183e65;}
+#pdfDialog #pdfCollectionItems .manual-top{height:clamp(165px,23vw,255px);min-height:0;padding:10px}
+#pdfDialog #pdfCollectionItems .doc-cover{height:100%;width:min(100%,180px);min-height:0}
+#pdfDialog #pdfCollectionItems .manual-body{padding:12px;min-height:0}
+#pdfDialog #pdfCollectionItems .manual-body h3{width:100%;max-width:none;min-height:0;margin:6px 0;font-size:14px;color:#143867;line-height:1.4}
+#pdfDialog #pdfCollectionItems .manual-body p{margin:0 0 8px;font-size:11px;line-height:1.5;max-width:none}
+#pdfDialog #pdfCollectionItems .manual-actions{margin-top:auto}
+#pdfDialog #pdfCollectionItems .manual-actions a{min-height:40px}
+#pdfDialog #pdfCollectionItems .manual-open-title{color:inherit}
+#pdfDialog #pdfCollectionItems .wrha-collection-note{grid-column:1/-1;margin:0}
+#pdfDialog #pdfCollectionItems .manual-open-title::after{z-index:5}
+#pdfDialog #pdfCollectionItems .manual-actions a{z-index:6}
+#pdfDialog.wrha-reader-contrast #pdfCollectionItems .manual-card{background:#000;color:#fff;border-color:#fff}
+#pdfDialog.wrha-reader-contrast #pdfCollectionItems .manual-body h3,#pdfDialog.wrha-reader-contrast #pdfCollectionItems .manual-body p{color:#fff}
+@media(max-width:760px){#pdfDialog #pdfCollectionItems{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}}
+@media(max-width:360px){#pdfDialog #pdfCollectionItems{grid-template-columns:1fr}}
+
+#pdfDialog .wrha-image-pane{flex:1;min-height:0;overflow:auto;background:#173653;display:flex;align-items:flex-start;justify-content:center;padding:10px}
+#pdfDialog .wrha-image-pane img{display:block;width:auto;max-width:100%;height:auto;max-height:100%;object-fit:contain;background:#fff}
+#pdfDialog .wrha-image-pane[hidden]{display:none!important}
+
+#pdfDialog .wrha-legal-edition{flex:none;display:flex;align-items:center;justify-content:space-between;gap:6px 12px;flex-wrap:wrap;background:#fff6e7;color:#795016;border-bottom:1px solid #eed7ae;padding:7px 12px;font-size:12px;line-height:1.35;overflow-wrap:anywhere}
+#pdfDialog .wrha-legal-edition[hidden]{display:none!important}#pdfDialog .wrha-legal-edition a{color:inherit;font-weight:700;text-decoration:underline}

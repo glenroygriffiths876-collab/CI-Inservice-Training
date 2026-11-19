@@ -1,0 +1,1 @@
+window.CI_LOCAL_MANIFEST={};
