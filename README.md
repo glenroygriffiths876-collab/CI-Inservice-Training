@@ -1,5 +1,18 @@
 # National Contact Investigation In-Service Training Academy
 
-Development preview: an original proposed digital professional-development experience for Jamaican CIs/DIOs. Institutional review and branding approval are pending. Not a clinical protocol, formal assessment system or accredited programme. Use only synthetic case data. No non-public documents, personal health information or authentic certificate credentials may be committed.
+Original proposed digital professional development for Jamaican CIs/DIOs. **Development preview, pending technical and institutional review.** This is not an approved clinical protocol, certification system or record of formal training. Use synthetic data only.
 
-The reference repositories are read-only. All operational and clinical guidance requires review against current approved national guidance. No private source files are included.
+## Current prototype
+- 11 proposed modules, 67 indicative hours, 66 original concise lessons and embedded formative cases.
+- Dashboard; searchable lessons; local progress, bookmarks and reflection; read-aloud; diagnostic/module/comprehensive practice reviews (reused formative questions, not secure examinations).
+- Eleven form references with explanatory practice worksheets (not official fillable replicas). Field Guide page numbers are navigation aids pending exact offset review.
+- Eleven decision scenarios; epidemiology and investigation cascade tools; QI worksheet; technical reviewer comments/export; demonstration certificate printable via the browser.
+- Source HSTU logo and adapted actual WRHA interactive document reader. The public resource catalogue references eighteen existing HSTU-hosted publications; the preparation workflow checks exact source bytes, first/middle/last pages and hashes, then creates local reading copies and genuine covers. Formal permission and edition review remain prerequisites for official publication.
+- Two lesson-specific video candidates, not full playback-verified. Remaining original lesson illustrations and per-lesson videos are not completed.
+- PWA foundation, local-only storage. No credentials, actual learner registry, patient records, formal exams, verified certificate numbers, sign-offs or authorised signatures.
+
+## Development and deployment
+Serve with `python -m http.server 8080` from repository root. Run `node scripts/check.mjs`. The library workflow can prepare copies from the owner's existing public HSTU library. GitHub Pages requires repository Settings > Pages > GitHub Actions (or an existing appropriate Pages setup). The deploy workflow runs after successful preparation or on manual dispatch.
+
+## Technical approval work
+Review all course text with the national technical team; confirm source rights and edition currentness, form extraction/offsets, actual data definitions, clinical and legal claims, accessibility and browser tests. Keep non-public source documents and high-stakes answer keys off the public repository. Use approved Moodle native Quiz and activity completion, facilitated practical rubrics, role-based user management and an issued credential verification registry for production. 

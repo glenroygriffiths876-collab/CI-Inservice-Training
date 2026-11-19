@@ -1,0 +1,35 @@
+name: Deploy academy to Pages
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Prepare and test academy"]
+    types: [completed]
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: ci-pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/configure-pages@v5
+      - run: |
+          mkdir -p /tmp/academy-pages
+          cp index.html *.js *.css manifest.webmanifest /tmp/academy-pages/
+          for p in assets documents covers vendor; do if [ -d "$p" ]; then cp -r "$p" /tmp/academy-pages/; fi; done
+          touch /tmp/academy-pages/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: /tmp/academy-pages
+      - id: deploy
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,47 @@
+name: Prepare and test academy
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'resources.js'
+      - 'scripts/**'
+      - 'app.js'
+      - 'index.html'
+      - 'reader-adapter.js'
+      - 'viewer.js'
+      - '.github/workflows/academy.yml'
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pymupdf pillow
+      - run: python scripts/prepare-library.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/check.mjs
+      - name: Commit validated published reading copies
+        run: |
+          git config user.name "CI Academy automation"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add documents covers vendor document-library-manifest.js reports/library-preparation.json
+          if ! git diff --cached --quiet; then git commit -m "Prepare exact published reading copies and integrity manifest"; git push; fi
+      - name: Browser smoke checks
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m http.server 8080 >/tmp/academy-http.log 2>&1 &
+          node scripts/browser-smoke.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: academy-validation
+          path: reports/
