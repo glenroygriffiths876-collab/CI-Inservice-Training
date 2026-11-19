@@ -1,0 +1,1 @@
+These images are authorised copies from the owner's Social Protection Services project. They are temporary art-direction references. Replace them with original CI/DIO-specific images as high-resolution assets become available. Do not depict these scenes as documented patient encounters.
