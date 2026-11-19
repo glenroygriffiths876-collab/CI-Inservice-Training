@@ -1,0 +1,1 @@
+window.CI_ART_THUMBNAILS={};
