@@ -1,0 +1,212 @@
+/* CI/DIO Academy — coordinated high-contrast theme system.
+   This file MUST follow premium.css and blue-vision.css.
+   The learner's current local preference is applied by app.js to <html data-theme>.
+   Keep the photograph-overlaid cinematic header dark in BOTH modes for readability. */
+html[data-theme="dark"]{
+ color-scheme:dark;
+ --theme-bg:#051738;--theme-surface:#0b3069;--theme-raised:#0b3c7a;
+ --theme-heading:#ffffff;--theme-text:#eff8ff;--theme-muted:#c8e4f5;
+ --theme-link:#89ecff;--theme-border:#368abd;--theme-accent:#ffd36e;
+ --theme-input:#0b3774;--theme-input-text:#f5fcff;--theme-placeholder:#bad9ea;
+ --theme-button:#0b78c8;--theme-button-text:#ffffff;--theme-hover:#0c64ae;
+ --theme-focus:#ffda74;--theme-shadow:0 8px 25px #020b27a3;
+}
+html[data-theme="light"]{
+ color-scheme:light;
+ --theme-bg:#ffffff;--theme-surface:#ffffff;--theme-raised:#edf5ff;
+ --theme-heading:#10284c;--theme-text:#19385f;--theme-muted:#455d7a;
+ --theme-link:#0759ba;--theme-border:#c3d7ee;--theme-accent:#b27211;
+ --theme-input:#ffffff;--theme-input-text:#173658;--theme-placeholder:#5b718b;
+ --theme-button:#0b63c4;--theme-button-text:#ffffff;--theme-hover:#064e9e;
+ --theme-focus:#d08c0d;--theme-shadow:0 6px 19px #123d6c16;
+}
+html[data-theme] body{color:var(--theme-text)}
+html[data-theme] a{color:var(--theme-link);text-decoration:underline;text-underline-offset:2px}
+html[data-theme] a:hover,html[data-theme] a:focus-visible{color:var(--theme-link);text-decoration-thickness:2px}
+html[data-theme] :is(button,a,input,select,textarea,summary):focus-visible{outline:3px solid var(--theme-focus);outline-offset:3px}
+html[data-theme] :is(button,input,textarea,select){accent-color:var(--theme-button)}
+html[data-theme] :is(input,textarea,select){color:var(--theme-input-text);background:var(--theme-input);border:1px solid var(--theme-border)}
+html[data-theme] :is(input,textarea)::placeholder{color:var(--theme-placeholder);opacity:1}
+html[data-theme] :is(.premium-lesson .panel,.shell .panel,.shell .card,.learning-resume,.module-review,.gallery-ribbon,.chapter-row,.metric-strip,.feature-library,.profile-strip){box-shadow:var(--theme-shadow)}
+html[data-theme] :is(.panel,.card,.chapter-row,.learning-resume,.module-review,.metric-strip,.gallery-ribbon,.profile-strip,.chapter-hero,.agenda-row,.chapter-list,.page-intro,.module-overview,.course-toolbar,.lesson-jumps){border-color:var(--theme-border)}
+html[data-theme] :is(.panel,.card,.chapter-content h3,.welcome-line,.section-title h2,.section-head h2,.page-intro h1,.module-overview h2,.learning-resume h2,.metric-strip strong,.lesson-agenda h2){color:var(--theme-heading)}
+html[data-theme] :is(.section-title p,.chapter-content p,.chapter-facts,.chapter-action small,.profile-strip p,.module-overview small,.page-intro p,.agenda-title small,.lesson-jumps span,.resume-progress small,.learning-resume p,.metric-strip>div>span,.muted,.shell small){color:var(--theme-muted)}
+html[data-theme] .tag{color:var(--theme-link);background:var(--theme-raised);border-color:var(--theme-border)}
+html[data-theme] .progress{background:var(--theme-border)}
+html[data-theme] .progress span{background:linear-gradient(90deg,#0f91d8,#44bbd3)}
+html[data-theme] .read-module{color:var(--theme-button-text);background:var(--theme-button);border-color:var(--theme-button)}
+html[data-theme] .read-module:hover{color:var(--theme-button-text);background:var(--theme-hover)}
+html[data-theme] :is(.inline-link,.hero-link){color:var(--theme-link)!important;background:transparent!important}
+html[data-theme] :is(.inline-link,.hero-link):hover{color:var(--theme-link)!important;text-decoration:underline}
+html[data-theme] :is(.shell main .panel input,.shell main .panel textarea,.shell main .panel select,.shell main input[type="search"]){color:var(--theme-input-text)!important;background:var(--theme-input)!important;border:1px solid var(--theme-border)!important}
+html[data-theme] :is(.shell main input,.shell main textarea)::placeholder{color:var(--theme-placeholder)!important;opacity:1}
+html[data-theme] .question button{background:var(--theme-raised);color:var(--theme-text);border-color:var(--theme-border)}
+html[data-theme] .question button:hover{background:var(--theme-hover);color:#fff}
+html[data-theme] .question button.correct{background:#145a56;color:#fff;border-color:#36b9a8}
+html[data-theme] .question button.wrong{background:#7e2c45;color:#fff;border-color:#e899ab}
+html[data-theme] .shell main .panel summary{color:var(--theme-link)}
+html[data-theme] .shell main .panel details{border-color:var(--theme-border)}
+html[data-theme] .panel :is(h1,h2,h3,h4,h5,h6,p,li,label,strong,small){color:inherit}
+html[data-theme] .panel :is(a,.inline-link){color:var(--theme-link)!important}
+html[data-theme] .panel button:not(.secondary):not(.brief-step):not(.inline-link):not(.question button){background:var(--theme-button);color:var(--theme-button-text)}
+html[data-theme] .panel button.secondary{background:var(--theme-raised);color:var(--theme-text);border-color:var(--theme-border)}
+html[data-theme] .premium-lesson :is(.panel,.panel.body,.panel.tint,.lesson-brief){color:var(--theme-text);border-color:var(--theme-border)}
+html[data-theme] .premium-lesson .panel.body p{color:var(--theme-text)}
+html[data-theme] .premium-lesson .panel.tint h3{color:var(--theme-link)}
+html[data-theme] .brief-step{background:var(--theme-raised);color:var(--theme-text);border-color:var(--theme-border)}
+html[data-theme] .brief-step.selected{background:var(--theme-button);color:#fff;border-color:var(--theme-button)}
+html[data-theme] .brief-card{background:var(--theme-surface);color:var(--theme-text);border:1px solid var(--theme-border);border-left:4px solid var(--theme-accent)}
+html[data-theme] .brief-card :is(h4,p,small){color:inherit}
+html[data-theme] #books .card{background:var(--theme-surface);color:var(--theme-text);border-color:var(--theme-border)}
+html[data-theme] #books .card :is(h3,small){color:inherit}
+html[data-theme] #books .card button{background:var(--theme-button);color:#fff}
+html[data-theme] .cert{background:#fffdf7!important;color:#143452!important;border-color:#b9a16b!important}
+html[data-theme] .cert :is(h1,h2,h3,p,small,strong){color:#143452!important}
+html[data-theme] .cert .name{color:#12617b!important}
+html[data-theme] .callout{background:#fff2c7!important;color:#503905!important;border-left:5px solid #c39034!important}
+html[data-theme] .callout :is(p,a,strong){color:#503905!important}
+html[data-theme] .feedback{color:var(--theme-heading)}
+html[data-theme] .secondary{color:var(--theme-text);background:var(--theme-raised);border-color:var(--theme-border)}
+html[data-theme] .data-table td{color:var(--theme-text);border-color:var(--theme-border)}
+html[data-theme] .data-table th{color:#fff;background:#13528b}
+html[data-theme] .premium-cta{color:#09264c!important;background:linear-gradient(120deg,#ffd166,#ffe9a3,#f0be55)}
+html[data-theme] .notice{color:#f0f8ff;background:#093368;border-color:#286fa3}
+html[data-theme] .cinematic{color:#fff;background:#082a62;border-color:#4cb7e6}
+html[data-theme] .cinematic :is(.cinematic-copy h1,.cinematic-copy p,.cinematic-kicker,.hero-link){color:#fff}
+html[data-theme] .cinematic .cinematic-kicker{color:#ffe2a0}
+html[data-theme] .cinematic h1 em{color:#ffe09b}
+html[data-theme] .cinematic .hero-link{color:#e1faff!important}
+html[data-theme] .chapter-visual>span{color:#fff;background:#09396dba;border-radius:6px;padding:2px 5px}
+html[data-theme] .feature-tile{color:white!important;border-color:#65a8d2}
+html[data-theme] .feature-tile .feature-content :is(strong,small,span){color:#fff}
+html[data-theme] .feature-tile .feature-content>span:first-child{color:#ffe19b}
+html[data-theme] .feature-tile .feature-arrow{color:#fff}
+html[data-theme] .module-review .premium-cta{color:#09264c}
+html[data-theme] .lesson-brief .mini-label{color:var(--theme-link)}
+html[data-theme] footer{background:#072550;color:#daeefa}
+html[data-theme] footer :is(a,small){color:#dcf7ff}
+/* Dark mode — deep blue, never green or black. */
+html[data-theme="dark"],html[data-theme="dark"] body{background:#071b47;color:var(--theme-text)}
+html[data-theme="dark"] body{background:radial-gradient(ellipse at 85% 1%,#124e9e 0%,transparent 36%),linear-gradient(160deg,#071b47,#061b40 68%,#08264f)}
+html[data-theme="dark"] .shell>aside{background:linear-gradient(165deg,#071b49,#0b367a)}
+html[data-theme="dark"] .topbar{background:linear-gradient(100deg,#071a45,#0b3678);border-color:#3389bd}
+html[data-theme="dark"] .topbar :is(.brand,.brand b,.brand small,#top-location,.top-edition){color:#f5fbff}
+html[data-theme="dark"] .topbar #nav{background:#0b306d}
+html[data-theme="dark"] .topbar #nav button{color:#fff}
+html[data-theme="dark"] .shell :is(.panel,.card,.chapter-row,.learning-resume,.metric-strip,.module-review,.gallery-ribbon,.profile-strip){background:#0b3069;color:var(--theme-text)}
+html[data-theme="dark"] :is(.chapter-content p,.chapter-facts,.chapter-action small,.section-title p,.metric-strip>div>span,.profile-strip p,.learning-resume p){color:#d0e7f6}
+html[data-theme="dark"] .chapter-hero{background:linear-gradient(112deg,#08285e,#0d56a1);color:#fff}
+html[data-theme="dark"] .agenda-row{background:#0a2e69;color:#fff}
+html[data-theme="dark"] .agenda-row:hover{background:#0c5398}
+html[data-theme="dark"] .premium-lesson .lesson-header{background:linear-gradient(115deg,#062456,#0c60ac);color:#fff}
+html[data-theme="dark"] .premium-lesson .concept-visual{background:linear-gradient(115deg,#0a3572,#0d4e8c);color:#fff}
+html[data-theme="dark"] .premium-lesson .concept-visual :is(strong,small){color:#fff}
+html[data-theme="dark"] .premium-lesson .panel.body .learning-task{background:#104477;color:#eaf7ff}
+html[data-theme="dark"] .premium-lesson .panel.body .learning-task p{color:#eaf7ff}
+/* Light mode — truly white canvas, navy type, legible blue interactive elements. */
+html[data-theme="light"],html[data-theme="light"] body{background:#ffffff!important;color:#19385f!important}
+html[data-theme="light"] body:before{opacity:0!important}
+html[data-theme="light"] .shell>main{background:#fff;color:#19385f}
+html[data-theme="light"] .topbar{background:#fff!important;border-top:3px solid #1576c9;border-bottom:1px solid #ccdced;box-shadow:0 2px 14px #1f4a701a}
+html[data-theme="light"] .topbar :is(.brand,.brand b,.brand small,#top-location){color:#153760!important}
+html[data-theme="light"] .topbar .top-edition{color:#294e72!important;background:#f2f7ff;border:1px solid #c6d9ec}
+html[data-theme="light"] .topbar :is(#menu,#mobile-theme){color:#0753aa;background:#eef5ff;border:1px solid #b5d3ed}
+html[data-theme="light"] .topbar #nav{background:#ffffff;border:1px solid #c0d4e8;box-shadow:0 9px 25px #19486d26}
+html[data-theme="light"] .topbar #nav button{color:#123d70}
+html[data-theme="light"] .topbar #nav button:hover{color:#fff;background:#0b64bd}
+html[data-theme="light"] .shell>aside{background:#f4f8ff!important;color:#19385f;border-right:1px solid #c6d9ec}
+html[data-theme="light"] .rail-top{border-color:#d0e0ef}
+html[data-theme="light"] .rail-top img{background:#fff;border:1px solid #cbdbea}
+html[data-theme="light"] .rail-top :is(strong,small){color:#173762}
+html[data-theme="light"] .rail-top strong span{color:#0869b9}
+html[data-theme="light"] .rail-heading{color:#4c6380}
+html[data-theme="light"] .rail-progress>div:first-child,html[data-theme="light"] .rail-progress>small{color:#425e7e}
+html[data-theme="light"] .rail-progress strong{color:#143d72}
+html[data-theme="light"] .rail-progress .progress{background:#d3e3f2}
+html[data-theme="light"] .rail-link{color:#173f72!important;background:transparent!important}
+html[data-theme="light"] .rail-link:hover{color:#104d9d!important;background:#e1efff!important}
+html[data-theme="light"] .rail-active{color:#fff!important;background:#0b63bd!important;box-shadow:0 3px 11px #0b64b530!important}
+html[data-theme="light"] .rail-active .ui-icon{color:#fff}
+html[data-theme="light"] .rail-bottom{border-color:#d0e0ef}
+html[data-theme="light"] .rail-bottom>small{color:#466582}
+html[data-theme="light"] .notice{background:#eef5fc;color:#24496e;border-color:#d5e3f0}
+html[data-theme="light"] :is(.welcome-line,.section-title h2,.section-head h2,.page-intro h1,.profile-strip h3,.metric-strip strong,.learning-resume h2,.module-overview h2){color:#102e58!important}
+html[data-theme="light"] :is(.edition-line,.mini-label,.chapter-kicker,.eyebrow){color:#245a97}
+html[data-theme="light"] :is(.section-title p,.chapter-content p,.chapter-facts,.chapter-action small,.page-intro p,.learning-resume p,.profile-strip p,.metric-strip>div>span,.module-overview small,.resume-progress small){color:#455f7d!important}
+html[data-theme="light"] .edition-tag{background:#eaf4ff;border-color:#c5dbee;color:#315676}
+html[data-theme="light"] :is(.shell .panel,.shell .card,.chapter-row,.learning-resume,.metric-strip,.gallery-ribbon,.profile-strip,.module-review){background:#fff!important;color:#19385f!important;border:1px solid #c6d9eb;box-shadow:0 6px 20px #173d6218}
+html[data-theme="light"] :is(.shell .panel,.shell .card,.chapter-row,.learning-resume,.metric-strip,.gallery-ribbon,.profile-strip,.module-review) :is(h1,h2,h3,h4,strong,p,small,label){color:inherit}
+html[data-theme="light"] .metric-strip>div{border-color:#d2dfed!important}
+html[data-theme="light"] .ring{background:conic-gradient(#0e78ca calc(var(--p)*1%),#d5e5f4 0)}
+html[data-theme="light"] .ring:before{background:#fff!important}
+html[data-theme="light"] .ring span{color:#143b70}
+html[data-theme="light"] .chapter-row{background:#fff!important}
+html[data-theme="light"] .chapter-row:hover{background:#f3f8fe!important}
+html[data-theme="light"] .chapter-visual{border:1px solid #c4d9e8}
+html[data-theme="light"] .chapter-content h3{color:#102e58!important}
+html[data-theme="light"] .read-module{background:#0b63bd!important;color:white!important}
+html[data-theme="light"] .read-module:hover{background:#084e95!important}
+html[data-theme="light"] .gallery-copy :is(h3,p){color:#19385f!important}
+html[data-theme="light"] .module-overview{background:#fff;border-color:#c8daeb}
+html[data-theme="light"] .chapter-hero{background:#e9f4ff!important;border:1px solid #bad5ea;color:#15395f}
+html[data-theme="light"] .chapter-hero :is(h1,p,.chapter-kicker){color:#15395f!important}
+html[data-theme="light"] .chapter-hero .chapter-visual>span{color:#fff}
+html[data-theme="light"] .agenda-row{background:#fff!important;color:#123b69;border-color:#c8d9ea}
+html[data-theme="light"] .agenda-row:hover{background:#edf5ff!important}
+html[data-theme="light"] .agenda-num,html[data-theme="light"] .agenda-status{color:#0758ae}
+html[data-theme="light"] .agenda-title strong{color:#19385f}
+html[data-theme="light"] .module-review{background:#eef5fc!important}
+html[data-theme="light"] .module-review :is(h2,p,small){color:#19385f!important}
+html[data-theme="light"] .premium-lesson .lesson-header{background:#ecf5ff!important;border-color:#bdd6eb;color:#153a63}
+html[data-theme="light"] .premium-lesson .lesson-header :is(h1,p,.eyebrow,.lesson-progress-line){color:#14375c!important}
+html[data-theme="light"] .premium-lesson .lesson-header .lesson-progress-line{border-color:#bbd4e9}
+html[data-theme="light"] .lesson-jumps button{background:#edf5ff;color:#1159a0;border-color:#c5daed}
+html[data-theme="light"] .lesson-jumps button:hover{background:#dcecff}
+html[data-theme="light"] .premium-lesson .concept-visual{background:#eff6fd!important;color:#17385f;border:1px solid #c9ddeb}
+html[data-theme="light"] .premium-lesson .concept-visual :is(strong,small){color:#17385f!important}
+html[data-theme="light"] .premium-lesson .concept-visual figcaption{background:#fff;color:#395875}
+html[data-theme="light"] .premium-lesson .panel{background:#fff!important;color:#19385f!important;border:1px solid #d1deeb}
+html[data-theme="light"] .premium-lesson .panel h2,html[data-theme="light"] .premium-lesson .panel h3,html[data-theme="light"] .premium-lesson .panel p,html[data-theme="light"] .premium-lesson .panel.body p{color:#19385f!important}
+html[data-theme="light"] .premium-lesson .panel.tint{background:#eef5fd!important;border-color:#c5dbed}
+html[data-theme="light"] .premium-lesson .panel.tint h3{color:#15599f!important}
+html[data-theme="light"] .premium-lesson .panel.body .learning-task{background:#eaf3fe;color:#1c3d62;border-left-color:#bd8120}
+html[data-theme="light"] .premium-lesson .panel.body .learning-task p{color:#1c3d62!important}
+html[data-theme="light"] .premium-lesson .lesson-brief{background:#f2f8ff!important;color:#19385f!important;border-color:#c3d9ec}
+html[data-theme="light"] .brief-step{background:#fff;color:#204466;border-color:#c6d9ec}
+html[data-theme="light"] .brief-step span{color:#386489}
+html[data-theme="light"] .brief-step.selected{background:#0b65c4;color:#fff;border-color:#0b65c4}
+html[data-theme="light"] .brief-step.selected span{color:#e5faff}
+html[data-theme="light"] .brief-card{background:#fff;color:#19385f;border-color:#c3d9ec;border-left-color:#ad7620}
+html[data-theme="light"] .brief-card :is(h4,p,small){color:#19385f}
+html[data-theme="light"] .shell #books .card{background:#fff!important;color:#17385f;border-color:#c5daec}
+html[data-theme="light"] .shell #books .card :is(h3,small){color:#17385f!important}
+html[data-theme="light"] .shell #books .book-cover{background:#f0f5fa}
+html[data-theme="light"] .shell #books .card button{background:#0b63c4;color:#fff}
+html[data-theme="light"] .shell .question button{background:#edf5ff;color:#183e6b;border-color:#c8d9eb}
+html[data-theme="light"] .shell .question button:hover{color:#fff;background:#0a62b9}
+html[data-theme="light"] .shell .question button.correct{background:#145a56;color:#fff}
+html[data-theme="light"] .shell .question button.wrong{background:#7e2c45;color:#fff}
+html[data-theme="light"] .shell .panel :is(input,select,textarea){background:#fff!important;color:#173658!important;border-color:#b7cde5!important}
+html[data-theme="light"] .shell .panel :is(input,textarea)::placeholder{color:#5b718b!important}
+html[data-theme="light"] .shell .data-table td{color:#173658;border-color:#d0ddeb}
+html[data-theme="light"] .shell .data-table th{background:#124e91;color:#fff}
+html[data-theme="light"] .filter-button{background:#eef5ff;color:#174b87;border-color:#bed4ed}
+html[data-theme="light"] .filter-button.active{background:#0b63bb;color:#fff;border-color:#0b63bb}
+html[data-theme="light"] .mobile-bottom{background:#fff;border-color:#c5d9ed;box-shadow:0 -3px 13px #1f4d7521}
+html[data-theme="light"] .mobile-bottom button{color:#245383}
+html[data-theme="light"] .mobile-bottom .mb-dot{color:#2364a8}
+html[data-theme="light"] .mobile-bottom button.selected{background:#0d63ba;color:#fff}
+html[data-theme="light"] .mobile-bottom button.selected .mb-dot{color:#fff}
+html[data-theme="light"] .profile-edit input{background:#fff;color:#16385f;border-color:#bad1e8}
+html[data-theme="light"] .profile-edit button{background:#0b63c4;color:#fff}
+html[data-theme="light"] .cinematic{background:#092b64}
+html[data-theme="light"] .cinematic .cinematic-shade{background:linear-gradient(90deg,#071e4a 0%,#0a2d62f6 31%,#0c387ac2 54%,transparent 91%),linear-gradient(0deg,#092b5bbb,transparent 39%)}
+html[data-theme="light"] .cinematic :is(h1,p,.cinematic-kicker){color:#fff!important}
+html[data-theme="light"] .cinematic h1 em{color:#ffdf99!important}
+@media(max-width:800px){
+ html[data-theme="light"] .cinematic .cinematic-shade{background:linear-gradient(0deg,#071e4a 0%,#082a61 44%,#093477b2 73%,transparent 92%)}
+ html[data-theme="light"] .topbar #nav{background:#fff}
+ html[data-theme="light"] .topbar #nav button{color:#143a69}
+ html[data-theme="light"] .topbar #nav button:hover{color:#fff}
+}
+@media(prefers-reduced-motion:reduce){html[data-theme] *,html[data-theme] *:before,html[data-theme] *:after{animation:none!important;transition:none!important}}
